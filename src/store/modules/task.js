@@ -1,6 +1,16 @@
 import _ from 'lodash'
 import axios from 'axios'
 
+function commitToBackend (task, state) {
+  axios.put('http://localhost:4567/api/task/' + task.id, task, {headers: {'Content-Type': 'text/json'}})
+    .then(res => {
+      Object.assign(state, res.data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}
+
 export default {
   namespaced: true,
 
@@ -17,12 +27,16 @@ export default {
   mutations: {
     enableEdit (state, payload) {
       const index = _.findIndex(state.all, ['id', payload.id])
-      state.all[index].editable = true
+      const task = Object.assign({}, state.all[index])
+      task.editable = true
+      commitToBackend(task, state.all[index])
     },
 
     disableEdit (state, payload) {
       const index = _.findIndex(state.all, ['id', payload.id])
-      state.all[index].editable = false
+      const task = Object.assign({}, state.all[index])
+      task.editable = false
+      commitToBackend(task, state.all[index])
     },
 
     updateContent (state, payload) {
