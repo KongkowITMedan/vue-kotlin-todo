@@ -11,6 +11,17 @@ function commitToBackend (task, state) {
     })
 }
 
+function addToBackend(task, state) {
+  axios.post('http://localhost:4567/api/task', task, {headers: {'Content-Type': 'text/json'}})
+    .then(res => {
+      Object.assign(state, res.data)
+      state.editable = true
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}
+
 export default {
   namespaced: true,
 
