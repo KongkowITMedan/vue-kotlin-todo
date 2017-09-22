@@ -1,6 +1,16 @@
 import _ from 'lodash'
 import axios from 'axios'
 
+function commitToBackend (task, state) {
+  axios.put('http://localhost:4567/api/task/' + task.id, task, {headers: {'Content-Type': 'text/json'}})
+    .then(res => {
+      Object.assign(state, res.data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}
+
 export default {
   namespaced: true,
 
@@ -35,17 +45,23 @@ export default {
   mutations: {
     enableEdit (state, payload) {
       const index = _.findIndex(state.all, ['id', payload.id])
-      state.all[index].editable = true
+      const task = Object.assign({}, state.all[index])
+      task.editable = true
+      commitToBackend(task, state.all[index])
     },
 
     disableEdit (state, payload) {
       const index = _.findIndex(state.all, ['id', payload.id])
-      state.all[index].editable = false
+      const task = Object.assign({}, state.all[index])
+      task.editable = false
+      commitToBackend(task, state.all[index])
     },
 
     updateContent (state, payload) {
       const index = _.findIndex(state.all, ['id', payload.id])
-      state.all[index].content = payload.content
+      const task = Object.assign({}, state.all[index])
+      task.content = payload.content
+      commitToBackend(task, state.all[index])
     },
 
     setComplete (state, payload) {
@@ -53,18 +69,14 @@ export default {
       const task = Object.assign({}, state.all[index])
       task.editable = false
       task.complete = true
-      axios.put('http://localhost:4567/api/task/' + task.id, task, {headers: {'Content-Type': 'text/json'}})
-        .then(res => {
-          Object.assign(state.all[index], res.data)
-        })
-        .catch(err => {
-          console.log(err)
-        })
+      commitToBackend(task, state.all[index])
     },
 
     setIncomplete (state, payload) {
       const index = _.findIndex(state.all, ['id', payload.id])
-      state.all[index].complete = false
+      const task = Object.assign({}, state.all[index])
+      task.complete = false
+      commitToBackend(task, state.all[index])
     },
 
     addTask (state) {
