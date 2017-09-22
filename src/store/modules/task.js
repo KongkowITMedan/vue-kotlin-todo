@@ -27,16 +27,14 @@ export default {
   mutations: {
     enableEdit (state, payload) {
       const index = _.findIndex(state.all, ['id', payload.id])
-      const task = Object.assign({}, state.all[index])
+      const task = state.all[index]
       task.editable = true
-      commitToBackend(task, state.all[index])
     },
 
     disableEdit (state, payload) {
       const index = _.findIndex(state.all, ['id', payload.id])
-      const task = Object.assign({}, state.all[index])
+      const task = state.all[index]
       task.editable = false
-      commitToBackend(task, state.all[index])
     },
 
     updateContent (state, payload) {
