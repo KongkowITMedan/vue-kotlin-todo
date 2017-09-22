@@ -9,38 +9,38 @@ export default {
 /*      {
         id: 1,
         content: 'Update readme',
-        isComplete: false,
-        isEditable: false
+        complete: false,
+        editable : false
       },
       {
         id: 2,
         content: 'fix bug#2',
-        isComplete: true,
-        isEditable: false
+        complete: true,
+        editable: false
       },
       {
         id: 3,
         content: 'drink water',
-        isComplete: false,
-        isEditable: false
+        complete: false,
+        editable: false
       }, */
     ]
   },
 
   getters: {
-    active: state => state.all.filter(task => !task.isComplete),
-    complete: state => state.all.filter(task => task.isComplete)
+    active: state => state.all.filter(task => !task.complete),
+    complete: state => state.all.filter(task => task.complete)
   },
 
   mutations: {
     enableEdit (state, payload) {
       const index = _.findIndex(state.all, ['id', payload.id])
-      state.all[index].isEditable = true
+      state.all[index].editable = true
     },
 
     disableEdit (state, payload) {
       const index = _.findIndex(state.all, ['id', payload.id])
-      state.all[index].isEditable = false
+      state.all[index].editable = false
     },
 
     updateContent (state, payload) {
@@ -50,21 +50,29 @@ export default {
 
     setComplete (state, payload) {
       const index = _.findIndex(state.all, ['id', payload.id])
-      state.all[index].isEditable = false
-      state.all[index].isComplete = true
+      const task = Object.assign({}, state.all[index])
+      task.editable = false
+      task.complete = true
+      axios.put('http://localhost:4567/api/task/' + task.id, task, {headers: {'Content-Type': 'text/json'}})
+        .then(res => {
+          Object.assign(state.all[index], res.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
 
     setIncomplete (state, payload) {
       const index = _.findIndex(state.all, ['id', payload.id])
-      state.all[index].isComplete = false
+      state.all[index].complete = false
     },
 
     addTask (state) {
       state.all.push({
         id: state.all.length + 1,
         content: '',
-        isComplete: false,
-        isEditable: true
+        complete: false,
+        editable: true
       })
     },
 

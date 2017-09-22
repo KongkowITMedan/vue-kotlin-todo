@@ -1,15 +1,15 @@
 <template>
   <div class="card">
-    <div class="card-content" :class="{ 'no-padding': task.isEditable }">
-      <textarea v-if="task.isEditable" class="textarea" v-model="content"></textarea>
+    <div class="card-content" :class="{ 'no-padding': task.editable }">
+      <textarea v-if="task.editable" class="textarea" v-model="content"></textarea>
       <p v-else class="subtitle">{{ task.content }}</p>
     </div>
 
     <footer class="card-footer">
-      <template v-if="task.isEditable">
+      <template v-if="task.editable">
         <a @click="updateCard" class="card-footer-item">Save</a>
       </template>
-      <template v-else-if="task.isComplete">
+      <template v-else-if="task.complete">
         <a @click="redoTask" class="card-footer-item">Redo</a>
       </template>
       <template v-else>
