@@ -11,6 +11,17 @@ function commitToBackend (task, state) {
     })
 }
 
+function addToBackend(task, state) {
+  axios.post('http://localhost:4567/api/task', task, {headers: {'Content-Type': 'text/json'}})
+    .then(res => {
+      Object.assign(state, res.data)
+      state.editable = true
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}
+
 export default {
   namespaced: true,
 
@@ -78,12 +89,9 @@ export default {
     },
 
     addTask (state) {
-      state.all.push({
-        id: state.all.length + 1,
-        content: '',
-        complete: false,
-        editable: true
-      })
+      const task = {content: '', editable: true}
+      state.all.push(task)
+      addToBackend({}, task)
     },
 
     loadInitialTasks(state, tasks) {
