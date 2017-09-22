@@ -1,11 +1,12 @@
 import _ from 'lodash'
+import axios from 'axios'
 
 export default {
   namespaced: true,
 
   state: {
     all: [
-      {
+/*      {
         id: 1,
         content: 'Update readme',
         isComplete: false,
@@ -22,7 +23,7 @@ export default {
         content: 'drink water',
         isComplete: false,
         isEditable: false
-      },
+      }, */
     ]
   },
 
@@ -65,6 +66,10 @@ export default {
         isComplete: false,
         isEditable: true
       })
+    },
+
+    loadInitialTasks(state, tasks) {
+      tasks.forEach((task) => { state.all.push(task) })
     }
   }
 }
