@@ -1,50 +1,11 @@
 import _ from 'lodash'
 import axios from 'axios'
 
-function commitToBackend (task, state) {
-  axios.put('http://localhost:4567/api/task/' + task.id, task, {headers: {'Content-Type': 'text/json'}})
-    .then(res => {
-      Object.assign(state, res.data)
-    })
-    .catch(err => {
-      console.log(err)
-    })
-}
-
-function addToBackend(task, state) {
-  axios.post('http://localhost:4567/api/task', task, {headers: {'Content-Type': 'text/json'}})
-    .then(res => {
-      Object.assign(state, res.data)
-      state.editable = true
-    })
-    .catch(err => {
-      console.log(err)
-    })
-}
-
 export default {
   namespaced: true,
 
   state: {
     all: [
-/*      {
-        id: 1,
-        content: 'Update readme',
-        complete: false,
-        editable : false
-      },
-      {
-        id: 2,
-        content: 'fix bug#2',
-        complete: true,
-        editable: false
-      },
-      {
-        id: 3,
-        content: 'drink water',
-        complete: false,
-        editable: false
-      }, */
     ]
   },
 
@@ -89,6 +50,7 @@ export default {
     },
 
     addTask (state) {
+<<<<<<< HEAD
       const task = {content: '', editable: true}
       state.all.push(task)
       addToBackend({}, task)
@@ -96,6 +58,30 @@ export default {
 
     loadInitialTasks(state, tasks) {
       tasks.forEach((task) => { state.all.push(task) })
+=======
+      state.all.push({
+        id: state.all.length + 1,
+        content: '',
+        isComplete: false,
+        isEditable: true
+      })
+    },
+
+    loadTask(state, payload) {
+      state.all.push(payload)
+    }
+  },
+
+  actions: {
+    loadInitialTasks (context) {
+      axios.get('http://localhost:4567/api/task')
+        .then(res => {
+          res.data.forEach(task => { context.commit('loadTask', task) })
+        })
+        .catch(err => {
+          console.log(err)
+        })
+>>>>>>> load initial task from api backend
     }
   }
 }

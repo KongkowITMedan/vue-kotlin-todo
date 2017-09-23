@@ -10,13 +10,6 @@ new Vue({
   router,
   render: h => h(App),
   created () {
-    var self = this
-    axios.get('http://localhost:4567/api/task')
-      .then((res) => {
-        self.$store.commit('task/loadInitialTasks', res.data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    this.$store.dispatch('task/loadInitialTasks')
   }
 })
