@@ -27,9 +27,7 @@ export default {
 
     updateContent (state, payload) {
       const index = _.findIndex(state.all, ['id', payload.id])
-      const task = Object.assign({}, state.all[index])
-      task.content = payload.content
-      commitToBackend(task, state.all[index])
+      Object.assign(state.all[index], payload)
     },
 
     setComplete (state, payload) {

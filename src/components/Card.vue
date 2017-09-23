@@ -47,7 +47,9 @@ export default {
     },
 
     clearTask () {
-      this.$store.commit('task/setComplete', { id: this.task.id })
+      var task = Object.assign({}, this.task)
+      task.complete = true
+      this.$store.dispatch('task/saveTask', task)
     },
 
     redoTask () {
