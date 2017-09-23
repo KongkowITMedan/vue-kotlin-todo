@@ -48,7 +48,7 @@ export default {
 
   methods: {
     addTask () {
-      this.$store.commit('task/addTask')
+      this.$store.dispatch('task/newTask')
     }
   }
 }

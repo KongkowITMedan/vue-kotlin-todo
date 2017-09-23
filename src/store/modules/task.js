@@ -17,14 +17,12 @@ export default {
   mutations: {
     enableEdit (state, payload) {
       const index = _.findIndex(state.all, ['id', payload.id])
-      const task = state.all[index]
-      task.editable = true
+      state.all[index].editable = true
     },
 
     disableEdit (state, payload) {
       const index = _.findIndex(state.all, ['id', payload.id])
-      const task = state.all[index]
-      task.editable = false
+      state.all[index].editable = false
     },
 
     updateContent (state, payload) {
@@ -36,34 +34,21 @@ export default {
 
     setComplete (state, payload) {
       const index = _.findIndex(state.all, ['id', payload.id])
-      const task = Object.assign({}, state.all[index])
-      task.editable = false
-      task.complete = true
-      commitToBackend(task, state.all[index])
+      state.all[index].editable = false
+      state.all[index].complete = true
     },
 
     setIncomplete (state, payload) {
       const index = _.findIndex(state.all, ['id', payload.id])
-      const task = Object.assign({}, state.all[index])
-      task.complete = false
-      commitToBackend(task, state.all[index])
+      state.all[index].complete = false
     },
 
     addTask (state) {
-<<<<<<< HEAD
-      const task = {content: '', editable: true}
-      state.all.push(task)
-      addToBackend({}, task)
-    },
-
-    loadInitialTasks(state, tasks) {
-      tasks.forEach((task) => { state.all.push(task) })
-=======
       state.all.push({
         id: state.all.length + 1,
         content: '',
-        isComplete: false,
-        isEditable: true
+        complete: false,
+        editable: true
       })
     },
 
@@ -81,7 +66,30 @@ export default {
         .catch(err => {
           console.log(err)
         })
->>>>>>> load initial task from api backend
+    },
+
+    newTask (context) {
+      axios.post('http://localhost:4567/api/task', {content: ''})
+        .then(res => {
+          var task = res.data
+          task.editable = true
+          context.commit('loadTask', task)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+
+    saveTask (context, task) {
+      var newTask = Object.assign({}, task)
+      newTask.editable = false
+      axios.put('http://localhost:4567/api/task/' + newTask.id, newTask)
+        .then(res => {
+          context.commit('updateContent', res.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   }
 }

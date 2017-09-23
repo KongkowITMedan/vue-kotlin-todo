@@ -39,6 +39,9 @@ export default {
     },
 
     updateCard () {
+      var task = this.task
+      task.content = this.content
+      this.$store.dispatch('task/saveTask', task)
       this.$store.commit('task/disableEdit', { id: this.task.id })
       this.$store.commit('task/updateContent', { id: this.task.id, content: this.content })
     },
