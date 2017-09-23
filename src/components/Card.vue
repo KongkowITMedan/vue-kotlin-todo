@@ -53,7 +53,9 @@ export default {
     },
 
     redoTask () {
-      this.$store.commit('task/setIncomplete', { id: this.task.id })
+      var task = Object.assign({}, this.task)
+      task.complete = false
+      this.$store.dispatch('task/saveTask', task)
     }
   }
 }
