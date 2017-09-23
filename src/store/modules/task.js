@@ -30,26 +30,6 @@ export default {
       Object.assign(state.all[index], payload)
     },
 
-    setComplete (state, payload) {
-      const index = _.findIndex(state.all, ['id', payload.id])
-      state.all[index].editable = false
-      state.all[index].complete = true
-    },
-
-    setIncomplete (state, payload) {
-      const index = _.findIndex(state.all, ['id', payload.id])
-      state.all[index].complete = false
-    },
-
-    addTask (state) {
-      state.all.push({
-        id: state.all.length + 1,
-        content: '',
-        complete: false,
-        editable: true
-      })
-    },
-
     loadTask(state, payload) {
       state.all.push(payload)
     }
